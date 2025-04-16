@@ -1,0 +1,90 @@
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Task Dashboard</h2>
+        <button class="btn btn-primary" (click)="openAddTaskModal(addTaskModal)">
+            + Add New Task
+        </button>
+    </div>
+
+    <!-- Kanban Board -->
+    <div class="row">
+        <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary-subtle">
+                    <h4 class="text-center">To Do</h4>
+                </div>
+                <div class="card-body">
+                    <div cdkDropList [cdkDropListData]="todo" (cdkDropListDropped)="drop($event, 'To Do')">
+                        <div *ngFor="let task of todo" class="card p-2 mb-2 rounded-1 shadow-sm bg-light" cdkDrag>
+                            {{ task.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning-subtle">
+                    <h4 class="text-center">In Progress</h4>
+                </div>
+                <div class="card-body">
+                    <div cdkDropList [cdkDropListData]="inProgress" (cdkDropListDropped)="drop($event, 'In Progress')">
+                        <div *ngFor="let task of inProgress" class="card p-2 mb-2 rounded-1 shadow-sm bg-light" cdkDrag>
+                            {{ task.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xxl-4 col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success-subtle">
+                    <h4 class="text-center">Done</h4>
+                </div>
+                <div class="card-body">
+                    <div cdkDropList [cdkDropListData]="done" (cdkDropListDropped)="drop($event, 'Done')">
+                        <div *ngFor="let task of done" class="card p-2 mb-2 rounded-1 shadow-sm bg-light" cdkDrag>
+                            {{ task.title }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #addTaskModal let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title">Add New Task</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <form [formGroup]="taskForm" (ngSubmit)="addTask(modal)">
+        <div class="modal-body">
+            <div class="mb-2">
+                <label class="form-label">Title *</label>
+                <input formControlName="title" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Description</label>
+                <input formControlName="description" class="form-control" />
+            </div>
+
+            <div class="mb-2">
+                <label class="form-label">Status</label>
+                <select formControlName="status" class="form-select">
+                    <option>To Do</option>
+                    <option>In Progress</option>
+                    <option>Done</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" (click)="modal.dismiss()">Cancel</button>
+            <button class="btn btn-success" type="submit" [disabled]="taskForm.invalid">Save Task</button>
+        </div>
+    </form>
+</ng-template>
